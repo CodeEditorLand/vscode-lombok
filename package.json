@@ -1,33 +1,48 @@
 {
   "name": "vscode-lombok",
   "displayName": "Lombok Annotations Support for VS Code",
-  "description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
   "version": "0.0.1",
-  "publisher": "vscjava",
-  "icon": "images/icon.png",
-  "license": "MIT",
-  "aiKey": [],
-  "engines": {
-    "vscode": "1.65.0"
+  "private": "false",
+  "description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "lombok",
+    "vs-code"
+  ],
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
-  "keywords": [
-    "lombok",
-    "vs-code"
-  ],
-  "categories": [
-    "Other"
-  ],
+  "license": "MIT",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
   "main": "./dist/extension",
-  "activationEvents": [
-    "onLanguage:java",
-    "workspaceContains:pom.xml",
-    "workspaceContains:build.gradle"
-  ],
+  "scripts": {
+    "build": "webpack --config webpack.config.js --mode=\"production\"",
+    "build-server": "node scripts/build/buildJdtlsExt.js",
+    "clean": "node ./node_modules/rimraf/bin.js out/",
+    "compile": "tsc -p . && webpack --config webpack.config.js",
+    "package": "vsce package",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "test": "npm run compile && node ./out/src/test/runTest.js",
+    "vscode:prepublish": "npm run compile",
+    "watch": "webpack --config webpack.config.js --watch"
+  },
   "contributes": {
+    "javaExtensions": [
+      "./plugins/com.microsoft.java.lombok-0.1.0.jar"
+    ],
     "languages": [
       {
         "id": "java",
@@ -40,25 +55,17 @@
           "java"
         ]
       }
-    ],
-    "javaExtensions": [
-      "./plugins/com.microsoft.java.lombok-0.1.0.jar"
     ]
   },
-  "scripts": {
-    "clean": "node ./node_modules/rimraf/bin.js out/",
-    "test": "npm run compile && node ./out/src/test/runTest.js",
-    "compile": "tsc -p . && webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch",
-    "build": "webpack --config webpack.config.js --mode=\"production\"",
-    "package": "vsce package",
-    "vscode:prepublish": "npm run compile",
-    "build-server": "node scripts/build/buildJdtlsExt.js",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
-  },
-  "extensionDependencies": [
-    "redhat.java"
+  "activationEvents": [
+    "onLanguage:java",
+    "workspaceContains:pom.xml",
+    "workspaceContains:build.gradle"
   ],
+  "dependencies": {
+    "vscode-extension-telemetry-wrapper": "0.13.3",
+    "vscode-languageclient": "9.0.1"
+  },
   "devDependencies": {
     "@types/glob": "8.1.0",
     "@types/mocha": "10.0.3",
@@ -71,26 +78,19 @@
     "ts-loader": "9.5.0",
     "tslint": "6.1.3",
     "typescript": "5.2.2",
+    "typescript-esbuild": "0.3.1",
     "webpack": "5.89.0",
-    "webpack-cli": "5.1.4",
-    "typescript-esbuild": "0.3.1"
+    "webpack-cli": "5.1.4"
   },
-  "dependencies": {
-    "vscode-extension-telemetry-wrapper": "0.13.3",
-    "vscode-languageclient": "9.0.1"
+  "extensionDependencies": [
+    "redhat.java"
+  ],
+  "engines": {
+    "vscode": "1.65.0"
   },
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
-  },
-  "type": "module",
-  "private": "false",
   "publishConfig": {
     "access": "public"
   },
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
-  }
+  "icon": "images/icon.png",
+  "aiKey": []
 }
