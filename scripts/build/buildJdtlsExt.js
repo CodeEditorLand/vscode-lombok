@@ -1,28 +1,37 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-const cp = require('child_process');
-const path = require('path');
-const fs = require('fs');
+const cp = require("child_process");
+const path = require("path");
+const fs = require("fs");
 
-const server_dir = path.resolve('./javaext');
+const server_dir = path.resolve("./javaext");
 
-cp.execSync(mvnw() + ' clean package', {
-    cwd: server_dir,
-    stdio: [0, 1, 2]
+cp.execSync(mvnw() + " clean package", {
+	cwd: server_dir,
+	stdio: [0, 1, 2],
 });
-copy(path.join(server_dir, 'com.microsoft.java.lombok/target'), path.resolve('plugins'), (file) => {
-    return /^com.microsoft.java.lombok.*.jar$/.test(file);
-});
+copy(
+	path.join(server_dir, "com.microsoft.java.lombok/target"),
+	path.resolve("plugins"),
+	(file) => {
+		return /^com.microsoft.java.lombok.*.jar$/.test(file);
+	}
+);
 
 function copy(sourceFolder, targetFolder, fileFilter) {
-    const jars = fs.readdirSync(sourceFolder).filter(file => fileFilter(file));
-    if (!fs.existsSync(targetFolder)) {
-        fs.mkdirSync(targetFolder);
-    }
-    for (const jar of jars) {
-        fs.copyFileSync(path.join(sourceFolder, jar), path.join(targetFolder, path.basename(jar)));
-    }
+	const jars = fs
+		.readdirSync(sourceFolder)
+		.filter((file) => fileFilter(file));
+	if (!fs.existsSync(targetFolder)) {
+		fs.mkdirSync(targetFolder);
+	}
+	for (const jar of jars) {
+		fs.copyFileSync(
+			path.join(sourceFolder, jar),
+			path.join(targetFolder, path.basename(jar))
+		);
+	}
 }
 
 function isWin() {

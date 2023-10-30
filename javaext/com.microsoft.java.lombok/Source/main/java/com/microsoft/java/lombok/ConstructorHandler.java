@@ -24,72 +24,74 @@ import org.eclipse.lsp4j.CodeActionParams;
 import org.eclipse.text.edits.TextEdit;
 
 public class ConstructorHandler {
-    public static void removeMethods(IType type, ListRewrite rewriter, ConstructorKind kind, IProgressMonitor monitor) {
-        try {
-            CompilationUnit astRoot = CoreASTProvider.getInstance().getAST(type.getCompilationUnit(),
-                    CoreASTProvider.WAIT_YES, monitor);
-            if (astRoot == null) {
-                return;
-            }
-            ITypeBinding typeBinding = ASTNodes.getTypeBinding(astRoot, type);
-            if (typeBinding == null) {
-                return;
-            }
-            
-            long nonStaticFieldLength = Arrays.stream(typeBinding.getDeclaredFields()).filter(field -> !Modifier.isStatic(field.getModifiers())).count();
+	public static void removeMethods(IType type, ListRewrite rewriter, ConstructorKind kind, IProgressMonitor monitor) {
+		try {
+			CompilationUnit astRoot = CoreASTProvider.getInstance().getAST(type.getCompilationUnit(),
+					CoreASTProvider.WAIT_YES, monitor);
+			if (astRoot == null) {
+				return;
+			}
+			ITypeBinding typeBinding = ASTNodes.getTypeBinding(astRoot, type);
+			if (typeBinding == null) {
+				return;
+			}
 
-            for (IMethodBinding item : typeBinding.getDeclaredMethods()) {
-                if (item.isDefaultConstructor()) {
-                    continue;
-                }
-                int parametersNum = item.getParameterTypes().length;
-                if (item.getName().equals(typeBinding.getName())) {
-                    if (kind == ConstructorKind.NO_ARG && parametersNum == 0) {
-                        ASTNode node = astRoot.findDeclaringNode(item);
-                        rewriter.replace(node, null, null);
-                        break;
-                    } else if (kind == ConstructorKind.ALL_ARGS && parametersNum == nonStaticFieldLength) {
-                        ASTNode node = astRoot.findDeclaringNode(item);
-                        rewriter.replace(node, null, null);
-                        break;
-                    }
-                }
-            }
+			long nonStaticFieldLength = Arrays.stream(typeBinding.getDeclaredFields())
+					.filter(field -> !Modifier.isStatic(field.getModifiers())).count();
 
-        } catch (Exception e) {
-            JavaLanguageServerPlugin.logException("Remove Lombok method", e);
-        }
-    }
+			for (IMethodBinding item : typeBinding.getDeclaredMethods()) {
+				if (item.isDefaultConstructor()) {
+					continue;
+				}
+				int parametersNum = item.getParameterTypes().length;
+				if (item.getName().equals(typeBinding.getName())) {
+					if (kind == ConstructorKind.NO_ARG && parametersNum == 0) {
+						ASTNode node = astRoot.findDeclaringNode(item);
+						rewriter.replace(node, null, null);
+						break;
+					} else if (kind == ConstructorKind.ALL_ARGS && parametersNum == nonStaticFieldLength) {
+						ASTNode node = astRoot.findDeclaringNode(item);
+						rewriter.replace(node, null, null);
+						break;
+					}
+				}
+			}
 
-    public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor,
-            ConstructorKind kind) {
-        IType type = SourceAssistProcessor.getSelectionType(params, monitor);
-        CheckConstructorsResponse response = GenerateConstructorsHandler.checkConstructorStatus(type, params.getRange(),
-                monitor);
-        if (response.constructors.length == 0) {
-            return null;
-        }
-        LspVariableBinding[] fields = new LspVariableBinding[] {};
-        if (kind == ConstructorKind.ALL_ARGS) {
-            fields = response.fields;
-        }
-        Preferences preferences = JavaLanguageServerPlugin.getPreferencesManager().getPreferences();
-        CodeGenerationSettings settings = new CodeGenerationSettings();
-        settings.createComments = preferences.isCodeGenerationTemplateGenerateComments();
-        return GenerateConstructorsHandler.generateConstructors(type, response.constructors, fields, settings, null, monitor);
-    }
+		} catch (Exception e) {
+			JavaLanguageServerPlugin.logException("Remove Lombok method", e);
+		}
+	}
 
-    public enum ConstructorKind {
-        NO_ARG(0), ALL_ARGS(1);
+	public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor,
+			ConstructorKind kind) {
+		IType type = SourceAssistProcessor.getSelectionType(params, monitor);
+		CheckConstructorsResponse response = GenerateConstructorsHandler.checkConstructorStatus(type, params.getRange(),
+				monitor);
+		if (response.constructors.length == 0) {
+			return null;
+		}
+		LspVariableBinding[] fields = new LspVariableBinding[] {};
+		if (kind == ConstructorKind.ALL_ARGS) {
+			fields = response.fields;
+		}
+		Preferences preferences = JavaLanguageServerPlugin.getPreferencesManager().getPreferences();
+		CodeGenerationSettings settings = new CodeGenerationSettings();
+		settings.createComments = preferences.isCodeGenerationTemplateGenerateComments();
+		return GenerateConstructorsHandler.generateConstructors(type, response.constructors, fields, settings, null,
+				monitor);
+	}
 
-        private final int value;
+	public enum ConstructorKind {
+		NO_ARG(0), ALL_ARGS(1);
 
-        private ConstructorKind(int value) {
-            this.value = value;
-        }
+		private final int value;
 
-        public int getValue() {
-            return value;
-        }
-    }
+		private ConstructorKind(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
 }

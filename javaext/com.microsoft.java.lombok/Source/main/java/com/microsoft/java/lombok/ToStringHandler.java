@@ -15,21 +15,21 @@ import org.eclipse.text.edits.TextEdit;
 
 public class ToStringHandler {
 
-    // <name, signature>
-    public static final Map<String, String> toStringMethods = new HashMap<>();
+	// <name, signature>
+	public static final Map<String, String> toStringMethods = new HashMap<>();
 
-    static {
-        toStringMethods.put("toString", "()Ljava.lang.String;");
-    }
+	static {
+		toStringMethods.put("toString", "()Ljava.lang.String;");
+	}
 
-    public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor) {
-        CheckToStringResponse response = GenerateToStringHandler.checkToStringStatus(params);
-        IType type = SourceAssistProcessor.getSelectionType(params);
-        return GenerateToStringHandler.generateToString(type, response.fields,
-                CodeGenerationUtils.findInsertElement(type, null), monitor);
-    }
+	public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor) {
+		CheckToStringResponse response = GenerateToStringHandler.checkToStringStatus(params);
+		IType type = SourceAssistProcessor.getSelectionType(params);
+		return GenerateToStringHandler.generateToString(type, response.fields,
+				CodeGenerationUtils.findInsertElement(type, null), monitor);
+	}
 
-    public static void removeMethods(IType type, ListRewrite rewriter, IProgressMonitor monitor) {
-        Utils.removeMethods(type, rewriter, toStringMethods, monitor);
-    }
+	public static void removeMethods(IType type, ListRewrite rewriter, IProgressMonitor monitor) {
+		Utils.removeMethods(type, rewriter, toStringMethods, monitor);
+	}
 }

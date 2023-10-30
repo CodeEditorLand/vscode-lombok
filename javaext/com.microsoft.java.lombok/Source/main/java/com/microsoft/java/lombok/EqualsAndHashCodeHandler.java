@@ -16,26 +16,26 @@ import org.eclipse.text.edits.TextEdit;
 
 public class EqualsAndHashCodeHandler {
 
-    // <name, signature>
-    public static final Map<String, String> equalsAndHashCodeMethods = new HashMap<>();
+	// <name, signature>
+	public static final Map<String, String> equalsAndHashCodeMethods = new HashMap<>();
 
-    static {
-        equalsAndHashCodeMethods.put("canEqual", "(Ljava.lang.Object;)Z");
-        equalsAndHashCodeMethods.put("equals", "(Ljava.lang.Object;)Z");
-        equalsAndHashCodeMethods.put("hashCode", "()I");
-    }
+	static {
+		equalsAndHashCodeMethods.put("canEqual", "(Ljava.lang.Object;)Z");
+		equalsAndHashCodeMethods.put("equals", "(Ljava.lang.Object;)Z");
+		equalsAndHashCodeMethods.put("hashCode", "()I");
+	}
 
-    public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor) {
-        CheckHashCodeEqualsResponse response = HashCodeEqualsHandler.checkHashCodeEqualsStatus(params);
-        IType type = SourceAssistProcessor.getSelectionType(params, monitor);
-        Preferences preferences = JavaLanguageServerPlugin.getPreferencesManager().getPreferences();
-        return HashCodeEqualsHandler.generateHashCodeEqualsTextEdit(type, response.fields, true,
-                preferences.isHashCodeEqualsTemplateUseJava7Objects(),
-                preferences.isHashCodeEqualsTemplateUseInstanceof(), preferences.isCodeGenerationTemplateUseBlocks(),
-                preferences.isCodeGenerationTemplateGenerateComments(), params.getRange(), monitor);
-    }
+	public static TextEdit generateMethods(CodeActionParams params, IProgressMonitor monitor) {
+		CheckHashCodeEqualsResponse response = HashCodeEqualsHandler.checkHashCodeEqualsStatus(params);
+		IType type = SourceAssistProcessor.getSelectionType(params, monitor);
+		Preferences preferences = JavaLanguageServerPlugin.getPreferencesManager().getPreferences();
+		return HashCodeEqualsHandler.generateHashCodeEqualsTextEdit(type, response.fields, true,
+				preferences.isHashCodeEqualsTemplateUseJava7Objects(),
+				preferences.isHashCodeEqualsTemplateUseInstanceof(), preferences.isCodeGenerationTemplateUseBlocks(),
+				preferences.isCodeGenerationTemplateGenerateComments(), params.getRange(), monitor);
+	}
 
-    public static void removeMethods(IType type, ListRewrite rewriter, IProgressMonitor monitor) {
-        Utils.removeMethods(type, rewriter, equalsAndHashCodeMethods, monitor);
-    }
+	public static void removeMethods(IType type, ListRewrite rewriter, IProgressMonitor monitor) {
+		Utils.removeMethods(type, rewriter, equalsAndHashCodeMethods, monitor);
+	}
 }

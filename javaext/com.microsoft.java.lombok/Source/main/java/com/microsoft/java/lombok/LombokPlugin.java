@@ -15,15 +15,15 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class LombokPlugin implements BundleActivator {
-    public static final String PLUGIN_ID = "com.microsoft.java.lombok";
-    public static BundleContext context = null;
+	public static final String PLUGIN_ID = "com.microsoft.java.lombok";
+	public static BundleContext context = null;
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-        LombokPlugin.context = context;
-    }
+	@Override
+	public void start(BundleContext context) throws Exception {
+		LombokPlugin.context = context;
+	}
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    }
+	@Override
+	public void stop(BundleContext context) throws Exception {
+	}
 }
