@@ -1,17 +1,35 @@
 {
-	"activationEvents": [
-		"onLanguage:java",
-		"workspaceContains:pom.xml",
-		"workspaceContains:build.gradle"
+	"name": "vscode-lombok",
+	"displayName": "Lombok Annotations Support for VS Code",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
+	"keywords": [
+		"land"
 	],
-	"aiKey": [],
-	"author": {
-		"email": "Land@PlayForm.Cloud",
-		"name": "🌆 — Land —",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandLombok#readme",
 	"bugs": {
 		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandLombok/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandLombok.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
+	"type": "module",
+	"main": "./dist/extension",
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"build": "webpack --config webpack.config.js --mode=\"production\"",
+		"build-server": "node scripts/build/buildJdtlsExt.js",
+		"clean": "node ./node_modules/rimraf/bin.js out/",
+		"compile": "tsc -p . && webpack --config webpack.config.js",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
 	"contributes": {
 		"javaExtensions": [
@@ -31,8 +49,12 @@
 			}
 		]
 	},
+	"activationEvents": [
+		"onLanguage:java",
+		"workspaceContains:pom.xml",
+		"workspaceContains:build.gradle"
+	],
 	"dependencies": {},
-	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
@@ -42,34 +64,12 @@
 		"rimraf": "5.0.5",
 		"ts-loader": "9.5.1"
 	},
-	"displayName": "Lombok Annotations Support for VS Code",
 	"extensionDependencies": [
 		"redhat.java"
 	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandLombok#readme",
-	"icon": "images/icon.png",
-	"keywords": [
-		"land"
-	],
-	"license": "SEE LICENSE IN LICENSE",
-	"main": "./dist/extension",
-	"name": "vscode-lombok",
-	"private": false,
 	"publishConfig": {
 		"access": "public"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandLombok.git"
-	},
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"build": "webpack --config webpack.config.js --mode=\"production\"",
-		"build-server": "node scripts/build/buildJdtlsExt.js",
-		"clean": "node ./node_modules/rimraf/bin.js out/",
-		"compile": "tsc -p . && webpack --config webpack.config.js",
-		"prepublishOnly": "Build 'Source/**/*.ts'"
-	},
-	"type": "module",
-	"version": "0.0.1"
+	"icon": "images/icon.png",
+	"aiKey": []
 }
