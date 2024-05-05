@@ -4,31 +4,32 @@
 	"version": "0.0.1",
 	"private": false,
 	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
-	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandLombok#readme",
 	"bugs": {
-		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandLombok/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandLombok.git"
 	},
 	"license": "SEE LICENSE IN LICENSE",
 	"author": {
-		"name": "Playform",
-		"email": "Hello@Playform.Cloud",
-		"url": "https://playform.cloud"
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
 	},
 	"type": "module",
 	"main": "./dist/extension",
 	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
 		"build": "webpack --config webpack.config.js --mode=\"production\"",
 		"build-server": "node scripts/build/buildJdtlsExt.js",
 		"clean": "node ./node_modules/rimraf/bin.js out/",
 		"compile": "tsc -p . && webpack --config webpack.config.js",
-		"package": "vsce package",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"vscode:prepublish": "npm run compile",
-		"watch": "webpack --config webpack.config.js --watch"
+		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
 	"contributes": {
 		"javaExtensions": [
@@ -53,24 +54,15 @@
 		"workspaceContains:pom.xml",
 		"workspaceContains:build.gradle"
 	],
-	"dependencies": {
-		"vscode-extension-telemetry-wrapper": "^0.13.2",
-		"vscode-languageclient": "7.1.0-next.5"
-	},
+	"dependencies": {},
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^10.0.1",
-		"@types/node": "^14.18.21",
-		"@types/vscode": "^1.65.0",
-		"@vscode/test-electron": "^2.3.8",
-		"glob": "^7.1.6",
-		"mocha": "^10.2.0",
-		"rimraf": "^3.0.1",
-		"ts-loader": "^9.3.1",
-		"typescript": "^4.7.4",
-		"typescript-esbuild": "0.4.5",
-		"webpack": "^5.76.0",
-		"webpack-cli": "^4.10.0"
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
+		"@types/glob": "8.1.0",
+		"@types/node": "20.12.7",
+		"glob": "10.3.12",
+		"rimraf": "5.0.5",
+		"ts-loader": "9.5.1"
 	},
 	"extensionDependencies": [
 		"redhat.java"
