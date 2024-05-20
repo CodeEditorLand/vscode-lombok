@@ -1,4 +1,0 @@
-
-suite("Extension Tests", function () {
-
-});
