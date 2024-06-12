@@ -26,11 +26,11 @@
 	"dependencies": {},
 	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
 	"devDependencies": {
-		"@types/glob": "^8.1.0",
-		"@types/node": "^20.14.2",
-		"glob": "^10.4.1",
-		"rimraf": "^5.0.7",
-		"ts-loader": "^9.5.1"
+		"@types/glob": "8.1.0",
+		"@types/node": "20.14.2",
+		"glob": "10.4.1",
+		"rimraf": "5.0.7",
+		"ts-loader": "9.5.1"
 	},
 	"displayName": "Lombok Annotations Support for VS Code",
 	"extensionDependencies": [
