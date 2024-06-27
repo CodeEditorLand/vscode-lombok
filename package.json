@@ -34,11 +34,11 @@
 	],
 	"dependencies": {},
 	"devDependencies": {
-		"@types/glob": "^8.1.0",
-		"@types/node": "^20.14.8",
-		"glob": "^10.4.2",
-		"rimraf": "^5.0.7",
-		"ts-loader": "^9.5.1"
+		"@types/glob": "8.1.0",
+		"@types/node": "20.14.8",
+		"glob": "10.4.2",
+		"rimraf": "5.0.7",
+		"ts-loader": "9.5.1"
 	},
 	"extensionDependencies": [
 		"redhat.java"
