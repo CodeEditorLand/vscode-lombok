@@ -1,10 +1,14 @@
 {
-	"activationEvents": [
-		"onLanguage:java",
-		"workspaceContains:pom.xml",
-		"workspaceContains:build.gradle"
-	],
-	"aiKey": [],
+	"name": "vscode-lombok",
+	"displayName": "Lombok Annotations Support for VS Code",
+	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
+	"main": "./dist/extension",
+	"scripts": {
+		"build": "webpack --config webpack.config.js --mode=\"production\"",
+		"build-server": "node scripts/build/buildJdtlsExt.js",
+		"clean": "node ./node_modules/rimraf/bin.js out/",
+		"compile": "tsc -p . && webpack --config webpack.config.js"
+	},
 	"contributes": {
 		"javaExtensions": [
 			"./plugins/com.microsoft.java.lombok-0.1.0.jar"
@@ -23,26 +27,22 @@
 			}
 		]
 	},
+	"activationEvents": [
+		"onLanguage:java",
+		"workspaceContains:pom.xml",
+		"workspaceContains:build.gradle"
+	],
 	"dependencies": {},
-	"description": "Refactor code with Lombok annotations, or remove Lombok annotations with actual methods.",
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/node": "^14.18.21",
-		"glob": "^7.1.6",
-		"rimraf": "^3.0.1",
-		"ts-loader": "^9.3.1"
+		"@types/glob": "8.1.0",
+		"@types/node": "22.4.0",
+		"glob": "11.0.0",
+		"rimraf": "6.0.1",
+		"ts-loader": "9.5.1"
 	},
-	"displayName": "Lombok Annotations Support for VS Code",
 	"extensionDependencies": [
 		"redhat.java"
 	],
 	"icon": "images/icon.png",
-	"main": "./dist/extension",
-	"name": "vscode-lombok",
-	"scripts": {
-		"build": "webpack --config webpack.config.js --mode=\"production\"",
-		"build-server": "node scripts/build/buildJdtlsExt.js",
-		"clean": "node ./node_modules/rimraf/bin.js out/",
-		"compile": "tsc -p . && webpack --config webpack.config.js"
-	}
+	"aiKey": []
 }
