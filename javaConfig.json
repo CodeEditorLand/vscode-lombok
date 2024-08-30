@@ -1,4 +1,0 @@
-{
-	"projects": ["./javaext/com.microsoft.java.lombok.target"],
-	"targetPlatform": "./javaext/com.microsoft.java.lombok.target/bundle.target"
-}
