@@ -1,15 +1,13 @@
-'use strict';
+"use strict";
 
-import {
-    CodeActionParams,
-} from 'vscode-languageclient';
+import { CodeActionParams } from "vscode-languageclient";
 
 export interface AnnotationResponse {
-    annotations: string[];
+	annotations: string[];
 }
 
 export interface LombokRequestParams {
-    context: CodeActionParams;
-    annotationsBefore: string[];
-    annotationsAfter: string[];
+	context: CodeActionParams;
+	annotationsBefore: string[];
+	annotationsAfter: string[];
 }
