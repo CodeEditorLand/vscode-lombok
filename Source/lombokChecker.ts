@@ -10,7 +10,9 @@ const lombokJarRegex = /lombok-\d+.*\.jar$/;
 
 export async function isLombokExists(): Promise<boolean> {
 	const projectUris: string[] = await getAllJavaProjects();
+
 	const extensionApi = await getExtensionApi();
+
 	if (!extensionApi) {
 		return false;
 	}
@@ -18,6 +20,7 @@ export async function isLombokExists(): Promise<boolean> {
 		const classpathResult = await extensionApi.getClasspaths(projectUri, {
 			scope: "test",
 		});
+
 		for (const classpath of classpathResult.classpaths) {
 			if (lombokJarRegex.test(classpath)) {
 				return true;
@@ -33,9 +36,11 @@ async function getAllJavaProjects(
 	let projectUris: string[] = (await executeJavaLanguageServerCommand(
 		Commands.GET_ALL_JAVA_PROJECTS,
 	)) as string[];
+
 	if (excludeDefaultProject) {
 		projectUris = projectUris.filter((uriString) => {
 			const projectPath = vscode.Uri.parse(uriString).fsPath;
+
 			return path.basename(projectPath) !== "jdt.ls-java-project";
 		});
 	}

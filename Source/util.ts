@@ -14,6 +14,7 @@ export function getUserSettingsPath(platform: string): string {
 			"/Library/Application Support/Code/User/settings.json",
 		linux: process.env.HOME + "/.config/Code/User/settings.json",
 	};
+
 	return map[platform];
 }
 
@@ -29,10 +30,12 @@ export function getJavaExtension(): vscode.Extension<any> | undefined {
 
 export async function getExtensionApi(): Promise<any> {
 	const extension: vscode.Extension<any> | undefined = getJavaExtension();
+
 	if (extension === undefined) {
 		return undefined;
 	}
 	const extensionApi: any = await extension.activate();
+
 	if (extensionApi.getClasspaths === undefined) {
 		throw undefined;
 	}

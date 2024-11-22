@@ -32,6 +32,7 @@ import { AnnotationResponse, LombokRequestParams } from "./protocol";
 
 const protoConverter: ProtocolConverter.Converter =
 	ProtocolConverter.createConverter(undefined, undefined);
+
 const codeConverter: CodeConverter.Converter = CodeConverter.createConverter();
 
 const supportedLombokAnnotations = [
@@ -66,6 +67,7 @@ const annotationLinks = [
 
 async function applyWorkspaceEdit(workspaceEdit: WorkspaceEdit): Promise<void> {
 	const edit = protoConverter.asWorkspaceEdit(workspaceEdit);
+
 	if (edit) {
 		await workspace.applyEdit(edit);
 	}
@@ -75,17 +77,20 @@ async function revealWorkspaceEdit(
 	workspaceEdit: WorkspaceEdit,
 ): Promise<void> {
 	const codeWorkspaceEdit = protoConverter.asWorkspaceEdit(workspaceEdit);
+
 	if (!codeWorkspaceEdit) {
 		return;
 	}
 	for (const entry of codeWorkspaceEdit.entries()) {
 		await workspace.openTextDocument(entry[0]);
+
 		if (entry[1].length > 0) {
 			// reveal first available change of the workspace edit
 			window.activeTextEditor?.revealRange(
 				entry[1][0].range,
 				TextEditorRevealType.InCenter,
 			);
+
 			break;
 		}
 	}
@@ -99,14 +104,17 @@ export async function lombokAction(
 	// java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING path $.context.diagnostics[0].code
 	// when parsing the params from json string to object. What we need is only the range and textDocument.
 	params.context.diagnostics = [];
+
 	const annotationResponse = (await executeJavaLanguageServerCommand(
 		Commands.JAVA_CODEACTION_LOMBOK_ANNOTATIONS,
 		JSON.stringify(params),
 	)) as AnnotationResponse;
+
 	if (!annotationResponse) {
 		return;
 	}
 	let annotationsAfter = [];
+
 	if (annotations.length) {
 		annotationsAfter = annotationResponse.annotations.filter((item) => {
 			return !annotations.includes(item);
@@ -127,6 +135,7 @@ export async function lombokAction(
 				],
 			};
 		});
+
 		const itemsToDelombok = annotationItems.filter((item) => {
 			return (
 				annotationResponse.annotations.indexOf(
@@ -134,6 +143,7 @@ export async function lombokAction(
 				) >= 0
 			);
 		});
+
 		const itemsToLombok = annotationItems.filter((item) => {
 			return (
 				annotationResponse.annotations.indexOf(
@@ -141,6 +151,7 @@ export async function lombokAction(
 				) < 0
 			);
 		});
+
 		const showItems: QuickPickItem[] = [];
 		showItems.push({
 			label: "Unselect to Delombok",
@@ -152,8 +163,11 @@ export async function lombokAction(
 			kind: QuickPickItemKind.Separator,
 		});
 		showItems.push(...itemsToLombok);
+
 		let selectedItems: readonly QuickPickItem[] = [];
+
 		const disposables: Disposable[] = [];
+
 		try {
 			selectedItems = await new Promise<readonly QuickPickItem[]>(
 				async (resolve, reject) => {
@@ -192,6 +206,7 @@ export async function lombokAction(
 			sendInfo("", {
 				operationName: "cancelLombokAction",
 			});
+
 			return;
 		} finally {
 			disposables.forEach((d) => d.dispose());
@@ -207,7 +222,9 @@ export async function lombokAction(
 	};
 
 	const lombok: string[] = [];
+
 	const delombok: string[] = [];
+
 	for (const annotation of lombokParams.annotationsBefore) {
 		if (!lombokParams.annotationsAfter.includes(annotation)) {
 			delombok.push(annotation);
@@ -222,10 +239,13 @@ export async function lombokAction(
 		sendInfo("", {
 			operationName: "cancelLombokAction",
 		});
+
 		return;
 	}
 	const startAt = Date.now();
+
 	let workspaceEdit;
+
 	try {
 		workspaceEdit = (await executeJavaLanguageServerCommand(
 			Commands.JAVA_CODEACTION_LOMBOK,
@@ -266,11 +286,16 @@ export class LombokCodeActionProvider implements CodeActionProvider {
 			range: codeConverter.asRange(range),
 			context: codeConverter.asCodeActionContext(context),
 		};
+
 		const selectText = document.getText(range);
+
 		let codeActionTitle = "Lombok...";
+
 		let selectedAnnotations: string[] = [];
+
 		if (selectText !== "") {
 			selectedAnnotations = getSelectedAnnotations(selectText);
+
 			if (selectedAnnotations.length === 1) {
 				codeActionTitle = `Delombok '${selectedAnnotations[0]}'`;
 			} else if (selectedAnnotations.length > 1) {

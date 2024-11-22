@@ -23,6 +23,7 @@ import { isLombokExists } from "./lombokChecker";
 import { getJavaExtension, isLombokSupportEnabled } from "./util";
 
 let isRegistered: boolean = false;
+
 let disposables: Disposable[] = [];
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -35,6 +36,7 @@ async function doActivate(
 	context: ExtensionContext,
 ): Promise<void> {
 	const javaLanguageSupport: Extension<any> | undefined = getJavaExtension();
+
 	if (!javaLanguageSupport) {
 		return;
 	}
@@ -42,6 +44,7 @@ async function doActivate(
 		await javaLanguageSupport.activate();
 	}
 	const extensionApi: any = javaLanguageSupport.exports;
+
 	if (!extensionApi) {
 		return;
 	}
