@@ -16,6 +16,7 @@ export async function isLombokExists(): Promise<boolean> {
 	if (!extensionApi) {
 		return false;
 	}
+
 	for (const projectUri of projectUris) {
 		const classpathResult = await extensionApi.getClasspaths(projectUri, {
 			scope: "test",
@@ -27,6 +28,7 @@ export async function isLombokExists(): Promise<boolean> {
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -44,5 +46,6 @@ async function getAllJavaProjects(
 			return path.basename(projectPath) !== "jdt.ls-java-project";
 		});
 	}
+
 	return projectUris;
 }

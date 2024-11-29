@@ -28,6 +28,7 @@ let disposables: Disposable[] = [];
 
 export async function activate(context: ExtensionContext): Promise<void> {
 	await initializeFromJsonFile(context.asAbsolutePath("./package.json"));
+
 	await instrumentOperation("activation", doActivate)(context);
 }
 
@@ -40,9 +41,11 @@ async function doActivate(
 	if (!javaLanguageSupport) {
 		return;
 	}
+
 	if (!javaLanguageSupport.isActive) {
 		await javaLanguageSupport.activate();
 	}
+
 	const extensionApi: any = javaLanguageSupport.exports;
 
 	if (!extensionApi) {
@@ -53,6 +56,7 @@ async function doActivate(
 		if (extensionApi.onDidServerModeChange) {
 			const onDidServerModeChange: Event<string> =
 				extensionApi.onDidServerModeChange;
+
 			context.subscriptions.push(
 				onDidServerModeChange(async (mode: string) => {
 					if (mode === LanguageServerMode.Standard) {
@@ -63,12 +67,14 @@ async function doActivate(
 		}
 	} else {
 		await extensionApi.serverReady();
+
 		syncComponents();
 	}
 
 	if (extensionApi.onDidClasspathUpdate) {
 		const onDidClasspathUpdate: Event<Uri> =
 			extensionApi.onDidClasspathUpdate;
+
 		context.subscriptions.push(
 			onDidClasspathUpdate(async () => {
 				// workaround: wait more time to make sure Language Server has updated all caches
@@ -82,6 +88,7 @@ async function doActivate(
 	if (extensionApi.onDidProjectsImport) {
 		const onDidProjectsImport: Event<Uri[]> =
 			extensionApi.onDidProjectsImport;
+
 		context.subscriptions.push(
 			onDidProjectsImport(() => {
 				syncComponents();
@@ -102,6 +109,7 @@ async function registerComponents(): Promise<void> {
 	if (isRegistered) {
 		return;
 	}
+
 	disposables.push(
 		instrumentOperationAsVsCodeCommand(
 			Commands.CODEACTION_LOMBOK,
@@ -110,12 +118,14 @@ async function registerComponents(): Promise<void> {
 			},
 		),
 	);
+
 	disposables.push(
 		languages.registerCodeActionsProvider(
 			{ scheme: "file", language: "java" },
 			new LombokCodeActionProvider(),
 		),
 	);
+
 	isRegistered = true;
 }
 
@@ -123,10 +133,13 @@ async function unRegisterComponents(): Promise<void> {
 	if (!isRegistered) {
 		return;
 	}
+
 	for (const disposable of disposables) {
 		disposable.dispose();
 	}
+
 	disposables = [];
+
 	isRegistered = false;
 }
 
@@ -134,5 +147,6 @@ export async function deactivate(): Promise<void> {
 	for (const disposable of disposables) {
 		disposable.dispose();
 	}
+
 	await disposeTelemetryWrapper();
 }

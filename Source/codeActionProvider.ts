@@ -81,6 +81,7 @@ async function revealWorkspaceEdit(
 	if (!codeWorkspaceEdit) {
 		return;
 	}
+
 	for (const entry of codeWorkspaceEdit.entries()) {
 		await workspace.openTextDocument(entry[0]);
 
@@ -113,6 +114,7 @@ export async function lombokAction(
 	if (!annotationResponse) {
 		return;
 	}
+
 	let annotationsAfter = [];
 
 	if (annotations.length) {
@@ -153,15 +155,19 @@ export async function lombokAction(
 		});
 
 		const showItems: QuickPickItem[] = [];
+
 		showItems.push({
 			label: "Unselect to Delombok",
 			kind: QuickPickItemKind.Separator,
 		});
+
 		showItems.push(...itemsToDelombok);
+
 		showItems.push({
 			label: "Select to Lombok",
 			kind: QuickPickItemKind.Separator,
 		});
+
 		showItems.push(...itemsToLombok);
 
 		let selectedItems: readonly QuickPickItem[] = [];
@@ -172,12 +178,18 @@ export async function lombokAction(
 			selectedItems = await new Promise<readonly QuickPickItem[]>(
 				async (resolve, reject) => {
 					const pickBox = window.createQuickPick();
+
 					pickBox.items = showItems;
+
 					pickBox.canSelectMany = true;
+
 					pickBox.ignoreFocusOut = true;
+
 					pickBox.selectedItems = itemsToDelombok;
+
 					pickBox.placeholder =
 						"Add or remove Lombok annotations in class";
+
 					disposables.push(
 						pickBox.onDidTriggerItemButton((e) => {
 							env.openExternal(
@@ -197,7 +209,9 @@ export async function lombokAction(
 							reject();
 						}),
 					);
+
 					disposables.push(pickBox);
+
 					pickBox.show();
 				},
 			);
@@ -211,10 +225,12 @@ export async function lombokAction(
 		} finally {
 			disposables.forEach((d) => d.dispose());
 		}
+
 		annotationsAfter = selectedItems.map((item) => {
 			return item.label.split("@")[1];
 		});
 	}
+
 	const lombokParams: LombokRequestParams = {
 		context: params,
 		annotationsBefore: annotationResponse.annotations,
@@ -230,11 +246,13 @@ export async function lombokAction(
 			delombok.push(annotation);
 		}
 	}
+
 	for (const annotation of lombokParams.annotationsAfter) {
 		if (!lombokParams.annotationsBefore.includes(annotation)) {
 			lombok.push(annotation);
 		}
 	}
+
 	if (!lombok.length && !delombok.length) {
 		sendInfo("", {
 			operationName: "cancelLombokAction",
@@ -242,6 +260,7 @@ export async function lombokAction(
 
 		return;
 	}
+
 	const startAt = Date.now();
 
 	let workspaceEdit;
@@ -259,7 +278,9 @@ export async function lombokAction(
 			duration: Date.now() - startAt,
 		});
 	}
+
 	await applyWorkspaceEdit(workspaceEdit);
+
 	await revealWorkspaceEdit(workspaceEdit);
 	// organize imports silently to fix missing annotation imports
 	await commands.executeCommand(

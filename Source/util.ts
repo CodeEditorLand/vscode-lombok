@@ -34,10 +34,12 @@ export async function getExtensionApi(): Promise<any> {
 	if (extension === undefined) {
 		return undefined;
 	}
+
 	const extensionApi: any = await extension.activate();
 
 	if (extensionApi.getClasspaths === undefined) {
 		throw undefined;
 	}
+
 	return extensionApi;
 }

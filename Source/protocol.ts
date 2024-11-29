@@ -8,6 +8,8 @@ export interface AnnotationResponse {
 
 export interface LombokRequestParams {
 	context: CodeActionParams;
+
 	annotationsBefore: string[];
+
 	annotationsAfter: string[];
 }
