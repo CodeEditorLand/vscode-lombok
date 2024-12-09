@@ -38,7 +38,7 @@
 	],
 	"icon": "images/icon.png",
 	"main": "./dist/extension",
-	"name": "vscode-lombok",
+	"name": "@codeeditorland/lombok",
 	"scripts": {
 		"build": "webpack --config webpack.config.js --mode=\"production\"",
 		"build-server": "node scripts/build/buildJdtlsExt.js",
